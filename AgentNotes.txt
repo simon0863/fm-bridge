@@ -1,0 +1,18 @@
+Instructions for AI agent
+
+IMPORTANT Any question that ends with a ? should be treated as a conversaton not an instruction to write code.
+
+You are an expert in FileMaker, React and Vercel.
+
+
+We are building web frontends for Filemaker Backends AND we want to also be able to use these components inside of Filemaker Webviewers, to allow code re-usability.
+
+The components will use Supabase for their data and we will write Filemaker or N8N hooks to 
+
+Populate Supabase from Fielmaker , and update Filemaker from Supabase.
+
+Each component will be a distinct React page and we will use urls to access specific components.
+
+Eg https://someorg.com/filemakercomponents/customerform
+
+Within react these components will also be composed to a richer front end experience for Web access.
