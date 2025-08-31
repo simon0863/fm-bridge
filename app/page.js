@@ -1,5 +1,9 @@
+// this is the home page that desribes FMBridge to users.
+
+
 import { readdirSync, statSync } from 'fs';
 import { join } from 'path';
+import AuthIcon from '@/components/auth/AuthIcon';
 
 // Function to discover components from the app directory
 function discoverComponents() {
@@ -52,12 +56,20 @@ export default function Home() {
 
   return (
     <div className="font-sans min-h-screen bg-gray-50">
+      {/* Top Header Bar */}
+      <div className="bg-white shadow-xs border-b border-gray-200">
+        <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+          <div className="text-3xl font-bold text-gray-900 mb-4">
+            FileMaker Bridge
+          </div>
+          <AuthIcon />
+        </div>
+      </div>
+
       <div className="max-w-6xl mx-auto px-4 py-8">
-        {/* Header */}
+        {/* Main Header */}
         <header className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            FileMaker Bridge Components
-          </h1>
+        
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             A collection of reusable React components that work both as web pages and within FileMaker WebViewers.
           </p>
@@ -118,3 +130,5 @@ export default function Home() {
     </div>
   );
 }
+
+
