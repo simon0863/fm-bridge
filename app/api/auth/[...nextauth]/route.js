@@ -68,10 +68,11 @@ const handler = NextAuth({
       type: "credentials",
       credentials:
         { magicLink: 'JWT' },
+      
       async authorize(credentials) {
         try {
           const filemakerService = FileMakerService.getInstance();
-          const fmJWT = await filemakerService.validateMagicLink(credentials.magicLink);
+          const fmJWT = await filemakerService.validateJWT(credentials.magicLink);
           if (!fmJWT) {
             console.log("FileMaker authentication failed for filemaker magic link")
             return null;

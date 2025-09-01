@@ -41,7 +41,7 @@ export default function AuthIcon() {
   // Show login icon if user is not authenticated
   return (
     <Link 
-      href="/auth/loginFmSecurity"
+      href="/auth/login"
       className="flex items-center justify-center w-8 h-8 rounded-full bg-green-100 hover:bg-green-200 transition-colors duration-200"
       title="Sign In"
     >
