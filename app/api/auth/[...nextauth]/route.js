@@ -24,8 +24,6 @@ const handler = NextAuth({
         }
       },
 
-
-
       async authorize(credentials) {
         // retrive single instance of FileMakerService
 
@@ -34,24 +32,13 @@ const handler = NextAuth({
 
           console.log("FileMaker auth attempt:", credentials.username);
 
-          // authenticate the user, validate the JWT and return the user object.
+          // validate the JWT and return the user object.
 
-          const fmJWT = await filemakerService.authenticateFileMakerUser(credentials.username, credentials.password)
+          const nextAuthUser = await filemakerService.authenticateFileMakerUser(credentials.username, credentials.password)
 
-          // user failed to authenticate
-          if (!fmJWT) {
-            console.log("FileMaker authentication failed for:", credentials.username)
-            return null
-          }
-
-          // user authenticated successfully
           console.log("FileMaker authentication successful for:", credentials.username)
+          return nextAuthUser
 
-          // Return user object for NextAuth.js session
-          return {
-            user: fmJWT.user,
-            group: fmJWT.privilegeSet,
-          }
 
         } catch (error) {
           console.error("FileMaker authentication error:", error)
@@ -68,28 +55,37 @@ const handler = NextAuth({
       type: "credentials",
       credentials:
         { magicLink: 'JWT' },
-      
+
       async authorize(credentials) {
         try {
           const filemakerService = FileMakerService.getInstance();
-          const fmJWT = await filemakerService.validateJWT(credentials.magicLink);
-          if (!fmJWT) {
-            console.log("FileMaker authentication failed for filemaker magic link")
-            return null;
-          }
-          // so jwt has been validated return user data to nextauth
+          const nextAuthUser = await filemakerService.validateJWT(credentials.magicLink);
 
-          return {
-            user: fmJWT.user,
-            group: fmJWT.privilegeSet,
-          }
+          return nextAuthUser
+
         } catch (error) {
           console.error('Filemaker magic link login failed', error)
           return null
         }
       }
-    })
+    }),
     // END FILEMAKER MAGIC LINK PROVIDOR
+
+     
+    // FILEMAKER PROXY FROM SUCCESS PAGE SESSION CREATON START
+    CredentialsProvider({
+      id: "oauth-success",
+      name: "OAuth Success",
+      type: "credentials",
+      credentials: {
+        user: { type: "text" }
+      },
+      async authorize(credentials) {
+        // Return the user data directly
+        return credentials.user
+      }
+    })
+   //FILEMAKER PROXY FROM SUCCESS PAGE END
   ],
 
   // Session configuration

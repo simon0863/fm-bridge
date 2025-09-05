@@ -1,4 +1,4 @@
-// this is the logout page for users
+// this is the logout page for users and Microsoft SSO proxy via filemaker.
 "use client"
 
 import { signOut } from 'next-auth/react'
