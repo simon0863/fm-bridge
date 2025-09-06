@@ -60,7 +60,7 @@ app.get('/api/oauth-providers', async (req, res) => {
     }
 });
 
-// Proxy endpoint for FileMaker tracking ID
+// Proxy endpoint for FileMaker tracking ID this triggers the filemaker callback
 app.get('/api/tracking-id', async (req, res) => {
     try {
         const { host, trackingId, provider } = req.query;

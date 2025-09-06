@@ -1,3 +1,32 @@
+/**
+ * FileMaker OAuth API Route
+ * 
+ * This API route handles the FileMaker proxied OAuth flow for Microsoft authentication.
+ * FileMaker acts as a proxy between our app and Microsoft OAuth, allowing us to use
+ * Microsoft SSO through FileMaker's Data API OAuth endpoints.
+ * 
+ * Flow:
+ * 1. App initiates OAuth with FileMaker (action=initiate)
+ * 2. FileMaker redirects user to Microsoft OAuth
+ * 3. Microsoft redirects back to FileMaker
+ * 4. FileMaker redirects back to our app with OAuth data
+ * 5. App completes OAuth and creates FileMaker session (action=complete)
+ * 6. App exchanges FileMaker session for JWT and creates NextAuth session
+ * 
+ * Supported Actions:
+ * - providers: Get available OAuth providers from FileMaker
+ * - initiate: Start OAuth flow with specified provider
+ * - status: Check status of OAuth session by tracking ID
+ * - complete: Complete OAuth flow with callback data
+ * - sessions: Get all active OAuth sessions (debugging)
+ * - full-flow: Test complete OAuth flow end-to-end
+ * 
+ * Usage:
+ * GET /api/filemaker-oauth?action=initiate&provider=Microsoft
+ * GET /api/filemaker-oauth?action=status&trackingId=12345
+ * GET /api/filemaker-oauth?action=sessions
+ */
+
 import { NextResponse } from "next/server"
 import { filemakerOAuthService } from "@/lib/filemaker-oauth-service"
 
@@ -22,7 +51,7 @@ export async function GET(request) {
                 })
 
             case 'initiate':
-                // Step 2: Initiate OAuth flow
+                // Step 2: Initiate OAuth flow ultimatley leading to a callback from filemaker
                 console.log('Initiating OAuth flow with provider:', provider)
                 const oauthInit = await filemakerOAuthService.initiateOAuth(host, provider)
                 console.log('OAuth initiation result:', oauthInit)

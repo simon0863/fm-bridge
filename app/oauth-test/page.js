@@ -17,7 +17,7 @@ export default function OAuthTestPage() {
     setLoading(prev => ({ ...prev, [action]: true }))
     
     try {
-      const url = `/api/test-filemaker-oauth-session?action=${action}&provider=Microsoft`
+      const url = `/api/filemaker-oauth?action=${action}&provider=Microsoft`
       const response = await fetch(url)
       const data = await response.json()
       
@@ -25,7 +25,7 @@ export default function OAuthTestPage() {
       
       // Auto-refresh sessions after any action completes
       if (action !== 'sessions') {
-        const sessionsResponse = await fetch('/api/test-filemaker-oauth-session?action=sessions')
+        const sessionsResponse = await fetch('/api/filemaker-oauth?action=sessions')
         const sessionsData = await sessionsResponse.json()
         setSessionsResponse(JSON.stringify(sessionsData, null, 2))
       }
