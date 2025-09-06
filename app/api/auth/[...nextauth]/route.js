@@ -2,6 +2,7 @@
 // Each array member of the providers array is a different authentication provider.
 import NextAuth from "next-auth"
 import { FileMakerService } from "@/lib/filemaker-service"
+import { validateJWT } from "@/lib/validateJWTToNextAuthUser"
 import CredentialsProvider from "next-auth/providers/credentials"
 
 const handler = NextAuth({
@@ -58,9 +59,7 @@ const handler = NextAuth({
 
       async authorize(credentials) {
         try {
-          const filemakerService = FileMakerService.getInstance();
-          const nextAuthUser = await filemakerService.validateJWT(credentials.magicLink);
-
+          const nextAuthUser = await validateJWT(credentials.magicLink);
           return nextAuthUser
 
         } catch (error) {

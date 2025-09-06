@@ -3,7 +3,7 @@
 
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 
 export default function OAuthTestPage() {
@@ -12,16 +12,60 @@ export default function OAuthTestPage() {
   const [fullFlowResponse, setFullFlowResponse] = useState('')
   const [sessionsResponse, setSessionsResponse] = useState('')
   const [loading, setLoading] = useState({})
+  const [selectedProvider, setSelectedProvider] = useState('')
+  const [availableProviders, setAvailableProviders] = useState([])
+  const [callbackData, setCallbackData] = useState('')
+  const [oauthUrl, setOauthUrl] = useState('')
+
+  // Check for OAuth callback data in URL parameters on component mount
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const callbackParams = {}
+    
+    // Check for common OAuth callback parameters
+    const oauthParams = ['code', 'state', 'error', 'error_description', 'trackingId', 'identifier', 'requestId']
+    
+    oauthParams.forEach(param => {
+      if (urlParams.has(param)) {
+        callbackParams[param] = urlParams.get(param)
+      }
+    })
+    
+    // If we have callback data, display it
+    if (Object.keys(callbackParams).length > 0) {
+      setCallbackData(JSON.stringify(callbackParams, null, 2))
+    }
+  }, [])
 
   const handleTest = async (action, setResponse) => {
     setLoading(prev => ({ ...prev, [action]: true }))
     
     try {
-      const url = `/api/filemaker-oauth?action=${action}&provider=Microsoft`
+      // For providers action, don't include provider parameter
+      const url = action === 'providers' 
+        ? `/api/filemaker-oauth?action=${action}`
+        : `/api/filemaker-oauth?action=${action}&provider=${selectedProvider}`
+      
       const response = await fetch(url)
       const data = await response.json()
       
       setResponse(JSON.stringify(data, null, 2))
+      
+      // If getting providers, update the available providers list
+      if (action === 'providers' && data.success && data.data && data.data.data && data.data.data.Provider) {
+        // Extract provider names from the nested structure
+        const providerNames = data.data.data.Provider.map(provider => provider.Name)
+        setAvailableProviders(providerNames)
+        // Auto-select first provider if available
+        if (providerNames.length > 0) {
+          setSelectedProvider(providerNames[0])
+        }
+      }
+      
+      // If initiating OAuth, extract the OAuth URL
+      if (action === 'initiate' && data.success && data.data && data.data.oauthUrl) {
+        setOauthUrl(data.data.oauthUrl)
+      }
       
       // Auto-refresh sessions after any action completes
       if (action !== 'sessions') {
@@ -41,6 +85,10 @@ export default function OAuthTestPage() {
     setInitiationResponse('')
     setFullFlowResponse('')
     setSessionsResponse('')
+    setSelectedProvider('')
+    setAvailableProviders([])
+    setCallbackData('')
+    setOauthUrl('')
   }
 
   return (
@@ -50,7 +98,13 @@ export default function OAuthTestPage() {
           FileMaker OAuth Test Page
         </h1>
         
-        <div className="mb-6">
+        <div className="mb-6 flex gap-4">
+          <a
+            href="/"
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Home
+          </a>
           <button
             onClick={clearAll}
             className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
@@ -59,7 +113,7 @@ export default function OAuthTestPage() {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="space-y-8">
           
           {/* Step 1: Get Providers */}
           <div className="bg-white p-6 rounded-lg shadow">
@@ -90,11 +144,38 @@ export default function OAuthTestPage() {
               Step 2: Initiate OAuth Flow
             </h2>
             <p className="text-gray-600 mb-4">
-              Starts OAuth authentication with Microsoft provider
+              Starts OAuth authentication with selected provider
             </p>
+            
+            {/* Provider Selection Dropdown */}
+            <div className="mb-4">
+              <label htmlFor="provider-select" className="block text-sm font-medium text-gray-700 mb-2">
+                Select OAuth Provider:
+              </label>
+              <select
+                id="provider-select"
+                value={selectedProvider}
+                onChange={(e) => setSelectedProvider(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                disabled={availableProviders.length === 0}
+              >
+                <option value="">Select a provider...</option>
+                {availableProviders.map((provider) => (
+                  <option key={provider} value={provider}>
+                    {provider}
+                  </option>
+                ))}
+              </select>
+              {availableProviders.length === 0 && (
+                <p className="text-sm text-gray-500 mt-1">
+                  Run Step 1 first to load available providers
+                </p>
+              )}
+            </div>
+
             <button
               onClick={() => handleTest('initiate', setInitiationResponse)}
-              disabled={loading.initiate}
+              disabled={loading.initiate || !selectedProvider}
               className="w-full px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 disabled:bg-green-300 mb-4"
             >
               {loading.initiate ? 'Loading...' : 'Initiate OAuth'}
@@ -107,8 +188,58 @@ export default function OAuthTestPage() {
             />
           </div>
 
+          {/* Step 2.5: OAuth Callback Data */}
+          <div className="bg-white p-6 rounded-lg shadow">
+            <h2 className="text-xl font-semibold mb-4 text-orange-600">
+              Step 2.5: OAuth Callback Data
+            </h2>
+            <p className="text-gray-600 mb-4">
+              Shows the data returned from the OAuth callback after user authentication
+            </p>
+            
+            {/* OAuth URL Button */}
+            {oauthUrl && (
+              <div className="mb-4 p-4 bg-blue-50 rounded-lg">
+                <h3 className="font-semibold text-blue-800 mb-2">OAuth URL Ready:</h3>
+                <p className="text-blue-700 text-sm mb-3">
+                  Click the button below to complete the OAuth authentication flow:
+                </p>
+                <a
+                  href={oauthUrl}
+                  target="_self"
+                  className="inline-block px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-medium"
+                >
+                  Complete OAuth Authentication
+                </a>
+                <p className="text-xs text-blue-600 mt-2">
+                  This will redirect to Microsoft for authentication in the same tab
+                </p>
+              </div>
+            )}
+            
+            <div className="mb-4 p-4 bg-orange-50 rounded-lg">
+              <h3 className="font-semibold text-orange-800 mb-2">How to get callback data:</h3>
+              <ol className="list-decimal list-inside text-orange-700 text-sm space-y-1">
+                <li>Complete Step 2 to get the OAuth URL</li>
+                <li>Click the "Complete OAuth Authentication" button above</li>
+                <li>After authentication, you'll be redirected back with callback data</li>
+                <li>The callback data will appear in this section automatically</li>
+              </ol>
+            </div>
+            <textarea
+              value={callbackData}
+              onChange={(e) => setCallbackData(e.target.value)}
+              placeholder="Callback data will appear here after OAuth authentication..."
+              className="w-full h-64 p-3 border border-gray-300 rounded font-mono text-sm bg-orange-50"
+              readOnly
+            />
+            <div className="mt-2 text-sm text-gray-500">
+              <strong>Note:</strong> This data comes from the OAuth callback URL parameters and shows what FileMaker returns after authentication.
+            </div>
+          </div>
+
           {/* Step 3: Full Flow */}
-          <div className="bg-white p-6 rounded-lg shadow lg:col-span-2">
+          <div className="bg-white p-6 rounded-lg shadow">
             <h2 className="text-xl font-semibold mb-4 text-purple-600">
               Step 3: Complete OAuth Flow
             </h2>
@@ -131,7 +262,7 @@ export default function OAuthTestPage() {
           </div>
 
           {/* OAuth Sessions Debug */}
-          <div className="bg-white p-6 rounded-lg shadow lg:col-span-2">
+          <div className="bg-white p-6 rounded-lg shadow">
             <h2 className="text-xl font-semibold mb-4 text-red-600">
               OAuth Sessions Debug
             </h2>
