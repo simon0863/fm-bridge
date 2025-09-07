@@ -2,11 +2,13 @@
 
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { useState, useEffect } from 'react'
 
 export default function OAuthErrorPage() {
   const searchParams = useSearchParams()
   const error = searchParams.get('error')
   const description = searchParams.get('description')
+  const [timestamp, setTimestamp] = useState('')
 
   // Define error types and their messages
   const getErrorInfo = (errorCode) => {
@@ -69,6 +71,11 @@ export default function OAuthErrorPage() {
   }
 
   const errorInfo = getErrorInfo(error)
+
+  // Set timestamp on client side to avoid hydration mismatch
+  useEffect(() => {
+    setTimestamp(new Date().toISOString())
+  }, [])
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -164,7 +171,7 @@ export default function OAuthErrorPage() {
             <div className="text-xs text-yellow-700 space-y-1">
               <p><strong>Error:</strong> {error || 'none'}</p>
               <p><strong>Description:</strong> {description || 'none'}</p>
-              <p><strong>Timestamp:</strong> {new Date().toISOString()}</p>
+              <p><strong>Timestamp:</strong> {timestamp || 'Loading...'}</p>
             </div>
           </div>
         )}
