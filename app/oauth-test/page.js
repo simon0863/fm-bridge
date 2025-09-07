@@ -4,9 +4,11 @@
 "use client"
 
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 
 
 export default function OAuthTestPage() {
+  const searchParams = useSearchParams()
   const [providersResponse, setProvidersResponse] = useState('')
   const [initiationResponse, setInitiationResponse] = useState('')
   const [fullFlowResponse, setFullFlowResponse] = useState('')
@@ -19,15 +21,14 @@ export default function OAuthTestPage() {
 
   // Check for OAuth callback data in URL parameters on component mount
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search)
     const callbackParams = {}
     
     // Check for common OAuth callback parameters
     const oauthParams = ['code', 'state', 'error', 'error_description', 'trackingId', 'identifier', 'requestId']
     
     oauthParams.forEach(param => {
-      if (urlParams.has(param)) {
-        callbackParams[param] = urlParams.get(param)
+      if (searchParams.has(param)) {
+        callbackParams[param] = searchParams.get(param)
       }
     })
     
@@ -35,7 +36,7 @@ export default function OAuthTestPage() {
     if (Object.keys(callbackParams).length > 0) {
       setCallbackData(JSON.stringify(callbackParams, null, 2))
     }
-  }, [])
+  }, [searchParams])
 
   const handleTest = async (action, setResponse) => {
     setLoading(prev => ({ ...prev, [action]: true }))

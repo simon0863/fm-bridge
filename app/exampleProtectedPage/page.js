@@ -6,6 +6,7 @@
 "use client"
 
 import ProtectedRoute from '@/components/auth/ProtectedRoute'
+import Link from 'next/link'
 
 export default function ExampleProtectedPage() {
   return (
@@ -32,12 +33,12 @@ export default function ExampleProtectedPage() {
               </p>
             </div>
           </div>
-          <a
+          <Link
             href="/"
             className="block w-full text-center bg-gray-600 text-white py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors mt-6"
           >
             Back to Home
-          </a>
+          </Link>
         </div>
       </div>
     </ProtectedRoute>

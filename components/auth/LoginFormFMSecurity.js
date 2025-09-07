@@ -53,8 +53,8 @@ export default function LoginForm() {
 
       if (oauthUrl) {
         console.log('about to redirect to Microsoft OAuth')
-        // Redirect to Microsoft OAuth
-        window.open(oauthUrl, '_self')
+        // Redirect to Microsoft OAuth using window.location for external URL
+        window.location.href = oauthUrl
       } else {
         setError('Failed to initiate Microsoft authentication. Please try again.')
       }

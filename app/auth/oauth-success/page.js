@@ -1,10 +1,11 @@
 'use client'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 
 export default function OAuthSuccess() {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const [status, setStatus] = useState('Processing...')
   
   useEffect(() => {
@@ -12,16 +13,18 @@ export default function OAuthSuccess() {
     
     if (userData) {
       try {
-        const user = JSON.parse(decodeURIComponent(userData))
+        //const user = JSON.parse(decodeURIComponent(userData))
+        const user = decodeURIComponent(userData)
+        console.log('in oath sucess pageuser data is ', user)
         
         // Use NextAuth's signIn to create the session
-        signIn('oauth-success', {
+        signIn('filemaker-proxy', {
+          user: user,
           redirect: false,
-          user: user // Pass the user data
         }).then((result) => {
           if (result?.ok) {
             setStatus('Success! Redirecting...')
-            window.location.href = '/'
+            router.push('/')
           } else {
             setStatus('Failed to create session')
           }
@@ -30,7 +33,7 @@ export default function OAuthSuccess() {
         setStatus('Error parsing user data')
       }
     }
-  }, [searchParams])
+  }, [searchParams, router])
   
   return <div>{status}</div>
 }

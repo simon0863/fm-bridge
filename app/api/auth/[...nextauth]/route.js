@@ -36,8 +36,9 @@ const handler = NextAuth({
           // validate the JWT and return the user object.
 
           const nextAuthUser = await filemakerService.authenticateFileMakerUser(credentials.username, credentials.password)
-
+          // const tempUser = {"id": 12234, "name": "fred", "filemakerDate": "some filemaker data" }
           console.log("FileMaker authentication successful for:", credentials.username)
+          // return tempUser
           return nextAuthUser
 
 
@@ -70,21 +71,23 @@ const handler = NextAuth({
     }),
     // END FILEMAKER MAGIC LINK PROVIDOR
 
-     
-    // FILEMAKER PROXY FROM SUCCESS PAGE SESSION CREATON START
+
+    // FILEMAKER PROXY OAUTH FROM SUCCESS PAGE
     CredentialsProvider({
-      id: "oauth-success",
-      name: "OAuth Success",
+      id: "filemaker-proxy",
+      name: "Proxy Success",
       type: "credentials",
-      credentials: {
-        user: { type: "text" }
-      },
-      async authorize(credentials) {
-        // Return the user data directly
-        return credentials.user
-      }
+      credentials:
+        { user:"user" },
+        async authorize(credentials) {
+
+          const userData = JSON.parse(credentials.user);
+          console.log('Parsed user data:', userData);
+          return userData;
+        
+        }
     })
-   //FILEMAKER PROXY FROM SUCCESS PAGE END
+    //FILEMAKER PROXY FROM SUCCESS PAGE END
   ],
 
   // Session configuration
@@ -102,11 +105,12 @@ const handler = NextAuth({
   // Callbacks for customizing the authentication flow
   callbacks: {
     async jwt({ token, user }) {
+      console.log(`in calllback token is ${JSON.stringify(token, null, 2)} user is ${JSON.stringify(user, null, 2)}`);
       // Add custom claims to JWT token
       if (user) {
         token.userId = user.id
-        token.username = user.name
-        token.filemakerData = user.filemakerData
+        token.username = user.user
+        token.privilegeSet = user.group
       }
       return token
     },
@@ -116,7 +120,7 @@ const handler = NextAuth({
       if (token) {
         session.user.id = token.userId
         session.user.username = token.username
-        session.user.filemakerData = token.filemakerData
+        session.user.filemakerData = token.privilegeSet
       }
       return session
     }

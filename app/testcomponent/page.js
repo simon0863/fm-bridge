@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default function TestComponent() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -22,12 +24,12 @@ export default function TestComponent() {
             </p>
           </div>
         </div>
-        <a
+        <Link
           href="/"
           className="block w-full text-center bg-gray-600 text-white py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors mt-6"
         >
           Back to Home
-        </a>
+        </Link>
       </div>
     </div>
   );

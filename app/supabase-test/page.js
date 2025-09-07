@@ -1,5 +1,6 @@
 "use client"
 import { useState } from 'react'
+import Link from 'next/link'
 
 export default function SupabaseTestPage() {
   const [testResponse, setTestResponse] = useState('')
@@ -36,9 +37,9 @@ export default function SupabaseTestPage() {
         </h1>
 
         <div className="mb-6 flex gap-4">
-          <a href="/" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+          <Link href="/" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
             Home
-          </a>
+          </Link>
           <button onClick={clearAll} className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">
             Clear All Responses
           </button>

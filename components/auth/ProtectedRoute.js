@@ -30,20 +30,14 @@ export default function ProtectedRoute({ children }) {
           })
           // Did the magic link fail to authenticate?
           if (result?.error) {
-            // Handle magic link error - don't let other useEffect redirect
-            const newUrl = new URL(window.location.href)
-            newUrl.searchParams.delete('jwt')
-            newUrl.searchParams.delete('token')
-            router.replace(newUrl.pathname)
+            // Handle magic link error - clean URL and redirect to error page
+            router.replace(router.asPath.split('?')[0]) // Remove query params
             router.push('/auth/magikLinkError')
             return // Exit early, don't continue
           }
           
-          // Success - clean URL
-          const newUrl = new URL(window.location.href)
-          newUrl.searchParams.delete('jwt')
-          newUrl.searchParams.delete('token')
-          router.replace(newUrl.pathname)
+          // Success - clean URL by removing JWT parameters
+          router.replace(router.asPath.split('?')[0]) // Remove query params
           
         } catch (error) {
           console.error('Magic link processing error:', error)
