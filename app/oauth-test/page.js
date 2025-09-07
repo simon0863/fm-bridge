@@ -42,9 +42,9 @@ export default function OAuthTestPage() {
     
     try {
       // For providers action, don't include provider parameter
-      const url = action === 'providers' 
-        ? `/api/filemaker-oauth?action=${action}`
-        : `/api/filemaker-oauth?action=${action}&provider=${selectedProvider}`
+                  const url = action === 'providers'
+                    ? `/api/filemaker-auth/oauth?action=${action}`
+                    : `/api/filemaker-auth/oauth?action=${action}&provider=${selectedProvider}`
       
       const response = await fetch(url)
       const data = await response.json()
@@ -69,7 +69,7 @@ export default function OAuthTestPage() {
       
       // Auto-refresh sessions after any action completes
       if (action !== 'sessions') {
-        const sessionsResponse = await fetch('/api/filemaker-oauth?action=sessions')
+                    const sessionsResponse = await fetch('/api/filemaker-auth/oauth?action=sessions')
         const sessionsData = await sessionsResponse.json()
         setSessionsResponse(JSON.stringify(sessionsData, null, 2))
       }

@@ -11,7 +11,7 @@ export default function SupabaseTestPage() {
   const handleTest = async (action, setResponse) => {
     setLoading(prev => ({ ...prev, [action]: true }))
     try {
-      const response = await fetch(`/api/supabase-test?action=${action}`)
+      const response = await fetch(`/api/supabase/test?action=${action}`)
       const data = await response.json()
       setResponse(JSON.stringify(data, null, 2))
     } catch (error) {

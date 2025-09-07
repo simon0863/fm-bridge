@@ -22,9 +22,9 @@
  * - full-flow: Test complete OAuth flow end-to-end
  * 
  * Usage:
- * GET /api/filemaker-oauth?action=initiate&provider=Microsoft
- * GET /api/filemaker-oauth?action=status&trackingId=12345
- * GET /api/filemaker-oauth?action=sessions
+ * GET /api/filemaker-auth/oauth?action=initiate&provider=Microsoft
+ * GET /api/filemaker-auth/oauth?action=status&trackingId=12345
+ * GET /api/filemaker-auth/oauth?action=sessions
  */
 
 import { NextResponse } from "next/server"

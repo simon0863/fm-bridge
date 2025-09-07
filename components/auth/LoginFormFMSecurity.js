@@ -43,7 +43,7 @@ export default function LoginForm() {
     
     try {
       // Call your custom OAuth initiation endpoint
-      const response = await fetch('/api/filemaker-oauth?action=initiate&provider=Microsoft')
+      const response = await fetch('/api/filemaker-auth/oauth?action=initiate&provider=Microsoft')
       const responsedata = await response.json()
       
       // Pull the oauthUrl from the response data 
