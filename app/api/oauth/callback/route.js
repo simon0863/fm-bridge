@@ -145,7 +145,7 @@ export async function GET(request) {
   // ========================================================================
   // If we reach here, the callback doesn't have the expected parameters
   // This could happen if someone accesses the URL directly or with malformed data
-ok   console.error('Invalid OAuth callback - no valid parameters')
+  console.error('Invalid OAuth callback - no valid parameters')
   return NextResponse.redirect(
     `${process.env.NEXTAUTH_URL}/auth/oauth-error?error=invalid_callback`
   )
