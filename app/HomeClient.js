@@ -56,11 +56,11 @@ export default function HomeClient({ components }) {
 
   const ComponentCard = ({ component }) => (
     <div className="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:shadow-md transition-shadow duration-200">
-      <h3 className="text-lg font-semibold text-gray-900 mb-2">
+      <h3 className="text-lg font-semibold text-gray-900 mb-2 break-words">
         {component.name}
       </h3>
       <p className="text-gray-600 mb-3">
-        Route: <code className="bg-gray-200 px-2 py-1 rounded text-sm">{component.path}</code>
+        Route: <code className="bg-gray-200 px-2 py-1 rounded text-sm break-all">{component.path}</code>
       </p>
       <a
         href={component.url}

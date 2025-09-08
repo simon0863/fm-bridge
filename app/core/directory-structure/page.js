@@ -54,9 +54,8 @@ function scanDirectory(dir, basePath = '') {
         const subPath = basePath ? `${basePath}/${item}` : item;
         result.subdirectories[item + '/'] = scanDirectory(fullPath, subPath);
       } else if (item.endsWith('.js') || item.endsWith('.jsx') || item.endsWith('.ts') || item.endsWith('.tsx')) {
-        // Include all JavaScript/TypeScript files in the directories
-        const description = getFileDescription(item, basePath);
-        result.files.push(`${item} - ${description}`);
+        // Skip files - only show directory structure
+        continue;
       }
     }
     
@@ -172,12 +171,16 @@ export default function DirectoryStructurePage() {
     "Use consistent naming conventions (camelCase for files, kebab-case for directories)"
   ];
 
-  const DirectoryTree = ({ structure, level = 0 }) => {
+  const DirectoryTree = ({ structure, level = 0, parentPath = '' }) => {
     const entries = Object.entries(structure);
     
     return (
       <div className="space-y-1">
         {entries.map(([name, details], index) => {
+          // Build the full URI path
+          const cleanName = name.replace('/', '');
+          const currentPath = parentPath ? `${parentPath}/${cleanName}` : cleanName;
+          
           return (
             <div key={name}>
               {/* Directory/File line */}
@@ -189,10 +192,13 @@ export default function DirectoryStructurePage() {
                   {name}
                 </span>
                 {typeof details === 'object' && details.description && (
-                  <span className="text-gray-600 text-sm">
+                  <span className="text-gray-600 text-sm mr-4">
                     {details.description}
                   </span>
                 )}
+                <span className="text-gray-500 text-sm font-mono bg-gray-100 px-2 py-1 rounded">
+                  /{currentPath}
+                </span>
               </div>
               
               {/* Subdirectories */}
@@ -201,28 +207,11 @@ export default function DirectoryStructurePage() {
                   <DirectoryTree 
                     structure={details.subdirectories} 
                     level={level + 1}
+                    parentPath={currentPath}
                   />
                 </div>
               )}
               
-              {/* Files */}
-              {typeof details === 'object' && details.files && (
-                <div className="ml-4 space-y-1">
-                  {details.files.map((file, fileIndex) => (
-                    <div key={fileIndex} className="flex items-center py-1">
-                      <div className="w-6 text-gray-400 text-center">
-                        📄
-                      </div>
-                      <span className="font-semibold text-green-600 mr-3 min-w-0 flex-shrink-0">
-                        {file.split(' - ')[0]}
-                      </span>
-                      <span className="text-gray-600 text-sm">
-                        {file.split(' - ')[1]}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              )}
               
               {/* String descriptions */}
               {typeof details === 'string' && (

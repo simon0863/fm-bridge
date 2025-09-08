@@ -2,6 +2,7 @@ Instructions for AI agent
 
 IMPORTANT Any question that ends with a ? should be treated as a conversaton not an instruction to write code.
 
+IMPORTANT NEVER MAKE CODING CHANGES BEFORE ASKING ME. SHOW ME A PROPOSED CHANGE AND THEN AS IF YOU SHOULD MAKE IT.
 You are an expert in FileMaker, React and Vercel.
 
 

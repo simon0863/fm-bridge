@@ -11,32 +11,13 @@ export default function OAuthTestPage() {
   const searchParams = useSearchParams()
   const [providersResponse, setProvidersResponse] = useState('')
   const [initiationResponse, setInitiationResponse] = useState('')
-  const [fullFlowResponse, setFullFlowResponse] = useState('')
   const [sessionsResponse, setSessionsResponse] = useState('')
   const [loading, setLoading] = useState({})
   const [selectedProvider, setSelectedProvider] = useState('')
   const [availableProviders, setAvailableProviders] = useState([])
-  const [callbackData, setCallbackData] = useState('')
   const [oauthUrl, setOauthUrl] = useState('')
 
-  // Check for OAuth callback data in URL parameters on component mount
-  useEffect(() => {
-    const callbackParams = {}
-    
-    // Check for common OAuth callback parameters
-    const oauthParams = ['code', 'state', 'error', 'error_description', 'trackingId', 'identifier', 'requestId']
-    
-    oauthParams.forEach(param => {
-      if (searchParams.has(param)) {
-        callbackParams[param] = searchParams.get(param)
-      }
-    })
-    
-    // If we have callback data, display it
-    if (Object.keys(callbackParams).length > 0) {
-      setCallbackData(JSON.stringify(callbackParams, null, 2))
-    }
-  }, [searchParams])
+
 
   const handleTest = async (action, setResponse) => {
     setLoading(prev => ({ ...prev, [action]: true }))
@@ -70,7 +51,7 @@ export default function OAuthTestPage() {
       
       // Auto-refresh sessions after any action completes
       if (action !== 'sessions') {
-                    const sessionsResponse = await fetch('/api/filemaker-auth/oauth?action=sessions')
+        const sessionsResponse = await fetch('/api/filemaker-auth/oauth?action=sessions')
         const sessionsData = await sessionsResponse.json()
         setSessionsResponse(JSON.stringify(sessionsData, null, 2))
       }
@@ -215,52 +196,39 @@ export default function OAuthTestPage() {
                 <p className="text-xs text-blue-600 mt-2">
                   This will redirect to Microsoft for authentication in the same tab
                 </p>
+                
+                {/* Callback URL Display */}
+                <div className="mt-4 p-3 bg-gray-100 rounded-lg">
+                  <h4 className="font-semibold text-gray-800 mb-2">Callback URL:</h4>
+                  <code className="text-sm text-gray-700 break-all">
+                    {window.location.origin}/auth/oauth-success?user=...
+                  </code>
+                  <p className="text-xs text-gray-600 mt-2">
+                    This is where the OAuth provider will redirect after authentication
+                  </p>
+                </div>
+                
+                {/* Warning about relogin */}
+                <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0">
+                      <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.726-1.36 3.491 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div className="ml-3">
+                      <h4 className="text-sm font-medium text-yellow-800">Important Note:</h4>
+                      <p className="text-sm text-yellow-700 mt-1">
+                        This will relogin the user. Any existing session will be replaced with the new OAuth session.
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
             
-            <div className="mb-4 p-4 bg-orange-50 rounded-lg">
-              <h3 className="font-semibold text-orange-800 mb-2">How to get callback data:</h3>
-              <ol className="list-decimal list-inside text-orange-700 text-sm space-y-1">
-                <li>Complete Step 2 to get the OAuth URL</li>
-                <li>Click the "Complete OAuth Authentication" button above</li>
-                <li>After authentication, you'll be redirected back with callback data</li>
-                <li>The callback data will appear in this section automatically</li>
-              </ol>
-            </div>
-            <textarea
-              value={callbackData}
-              onChange={(e) => setCallbackData(e.target.value)}
-              placeholder="Callback data will appear here after OAuth authentication..."
-              className="w-full h-64 p-3 border border-gray-300 rounded font-mono text-sm bg-orange-50"
-              readOnly
-            />
-            <div className="mt-2 text-sm text-gray-500">
-              <strong>Note:</strong> This data comes from the OAuth callback URL parameters and shows what FileMaker returns after authentication.
-            </div>
           </div>
 
-          {/* Step 3: Full Flow */}
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-xl font-semibold mb-4 text-purple-600">
-              Step 3: Complete OAuth Flow
-            </h2>
-            <p className="text-gray-600 mb-4">
-              Tests the complete flow: get providers + initiate OAuth
-            </p>
-            <button
-              onClick={() => handleTest('full-flow', setFullFlowResponse)}
-              disabled={loading['full-flow']}
-              className="w-full px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 disabled:bg-purple-300 mb-4"
-            >
-              {loading['full-flow'] ? 'Loading...' : 'Test Full Flow'}
-            </button>
-            <textarea
-              value={fullFlowResponse}
-              onChange={(e) => setFullFlowResponse(e.target.value)}
-              placeholder="Response will appear here..."
-              className="w-full h-80 p-3 border border-gray-300 rounded font-mono text-sm"
-            />
-          </div>
 
           {/* OAuth Sessions Debug */}
           <div className="bg-white p-6 rounded-lg shadow">
