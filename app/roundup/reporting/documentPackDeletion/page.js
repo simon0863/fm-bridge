@@ -8,9 +8,9 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { CalendarIcon, RefreshCw } from 'lucide-react'
 import { format } from 'date-fns'
-import ReportHeader from '@/components/reports/ReportHeader'
-import DocumentDeletionTable from '@/components/reports/DocumentDeletionTable'
-import DrillDownDrawer from '@/components/reports/DrillDownDrawer'
+import ReportHeader from '@/components/roundup/reporting/documentPackDeletion/ReportHeader'
+import DocumentDeletionTable from '@/components/roundup/reporting/documentPackDeletion/DocumentDeletionTable'
+import DrillDownDrawer from '@/components/roundup/reporting/documentPackDeletion/DrillDownDrawer'
 import { cn } from '@/lib/utils'
 
 export default function DocumentDeletionReport() {
@@ -38,7 +38,7 @@ export default function DocumentDeletionReport() {
         days: days.toString()
       })
       
-      const response = await fetch(`/api/supabase-reports?${params}`)
+      const response = await fetch(`/api/roundup/reporting/documentPackDeletion?${params}`)
       const result = await response.json()
       
       if (!response.ok) {
