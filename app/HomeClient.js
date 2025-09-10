@@ -1,6 +1,6 @@
 /**
  * Homepage Client Component - Interactive UI Features
- * 
+ *  
  * This client component handles all interactive features on the homepage including
  * accordion toggles, state management, and user interactions. It receives data
  * from the server component and provides the interactive experience.
