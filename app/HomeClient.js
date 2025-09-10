@@ -1,3 +1,15 @@
+/**
+ * Homepage Client Component - Interactive UI Features
+ * 
+ * This client component handles all interactive features on the homepage including
+ * accordion toggles, state management, and user interactions. It receives data
+ * from the server component and provides the interactive experience.
+ * 
+ * Why we need both page.js and HomeClient.js:
+ * - page.js: Server component for data fetching and initial rendering
+ * - HomeClient.js: Client component for interactivity, state, and browser APIs
+ */
+
 "use client";
 
 import { useState } from 'react';
@@ -87,7 +99,7 @@ export default function HomeClient({ components }) {
         {/* Main Header */}
         <header className="text-center mb-12">
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            A collection of reusable React components that work both as web pages and within FileMaker WebViewers.
+            A collection of reusable React components that work both as web pages and within FileMaker WebViewers. FileMaker Oauth based on Rob's proxy files.
           </p>
         </header>
 

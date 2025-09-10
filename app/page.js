@@ -1,4 +1,16 @@
-// this is the home page that desribes FMBridge to users.
+/**
+ * Homepage Server Component - FMBridge Landing Page
+ * 
+ * This is the main homepage that describes FMBridge to users and provides navigation
+ * to different components. It runs on the server and dynamically discovers available
+ * pages/components from the app directory structure.
+ * 
+ * Why we need both page.js and HomeClient.js:
+ * - page.js: Server-side component that handles data fetching, file system operations,
+ *   and renders the initial HTML. Cannot use browser APIs or React hooks.
+ * - HomeClient.js: Client-side component that handles interactive features like
+ *   accordion toggles, state management, and user interactions. Runs in the browser.
+ */
 
 import { readdirSync, statSync } from 'fs';
 import { join } from 'path';
