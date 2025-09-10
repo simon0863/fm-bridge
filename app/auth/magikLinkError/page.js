@@ -19,7 +19,7 @@ export default function MagicLinkErrorPage() {
             </p>
           </div>
           <div className="p-4 bg-green-50 rounded-lg">
-            <h3 className="font-semibold text-green-900">If it still doesn't work</h3>
+            <h3 className="font-semibold text-green-900">If it still doesn&apos;t work</h3>
             <p className="text-green-700 text-sm">
               Contact us to get a new link.
             </p>

@@ -146,7 +146,7 @@ export default function SupabaseTestPage() {
           <h3 className="text-lg font-semibold text-blue-900 mb-4">How to use this page:</h3>
           <ol className="list-decimal list-inside text-blue-800 space-y-2">
             <li><strong>Test Connection:</strong> Verify your Supabase setup is working</li>
-            <li><strong>Read Data:</strong> See what's currently in your test_users table</li>
+            <li><strong>Read Data:</strong> See what&apos;s currently in your test_users table</li>
             <li><strong>Write Data:</strong> Create a new test user to verify write operations</li>
             <li><strong>Cleanup:</strong> Remove test data to keep your database clean</li>
           </ol>

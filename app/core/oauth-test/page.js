@@ -5,6 +5,7 @@
 
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
+import Link from 'next/link'
 
 
 export default function OAuthTestPage() {
@@ -81,12 +82,12 @@ export default function OAuthTestPage() {
         </h1>
         
         <div className="mb-6 flex gap-4">
-          <a
+          <Link
             href="/"
             className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           >
             Home
-          </a>
+          </Link>
           <button
             onClick={clearAll}
             className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
@@ -255,9 +256,9 @@ export default function OAuthTestPage() {
             How to Use This Test Page
           </h3>
           <ol className="list-decimal list-inside space-y-2 text-blue-700">
-            <li><strong>Step 1:</strong> Click "Get Providers" to see available OAuth providers from your FileMaker server</li>
-            <li><strong>Step 2:</strong> Click "Initiate OAuth" to start the OAuth flow and get the redirect URL</li>
-            <li><strong>Step 3:</strong> Click "Test Full Flow" to run both steps together</li>
+            <li><strong>Step 1:</strong> Click &quot;Get Providers&quot; to see available OAuth providers from your FileMaker server</li>
+            <li><strong>Step 2:</strong> Click &quot;Initiate OAuth&quot; to start the OAuth flow and get the redirect URL</li>
+            <li><strong>Step 3:</strong> Click &quot;Test Full Flow&quot; to run both steps together</li>
             <li><strong>Watch Sessions:</strong> The OAuth Sessions section automatically updates after each step to show the current session state</li>
             <li><strong>Debug:</strong> Use the responses to understand the OAuth flow and troubleshoot issues</li>
           </ol>

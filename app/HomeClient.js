@@ -99,7 +99,7 @@ export default function HomeClient({ components }) {
         {/* Main Header */}
         <header className="text-center mb-12">
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            A collection of reusable React components that work both as web pages and within FileMaker WebViewers. FileMaker Oauth based on Rob's proxy files.
+            A collection of reusable React components that work both as web pages and within FileMaker WebViewers. FileMaker Oauth based on Rob&apos;s proxy files.
           </p>
         </header>
 

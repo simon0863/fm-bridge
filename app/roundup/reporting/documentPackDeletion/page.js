@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
@@ -28,7 +28,7 @@ export default function DocumentDeletionReport() {
 
 
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true)
     setError(null)
     
@@ -51,11 +51,11 @@ export default function DocumentDeletionReport() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [startDate, days])
 
   useEffect(() => {
     fetchData()
-  }, [startDate, days])
+  }, [fetchData])
 
   const handleDrillDown = (document) => {
     setSelectedDocument(document)
