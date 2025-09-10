@@ -12,6 +12,7 @@ import ReportHeader from '@/components/roundup/reporting/documentPackDeletion/Re
 import DocumentDeletionTable from '@/components/roundup/reporting/documentPackDeletion/DocumentDeletionTable'
 import DrillDownDrawer from '@/components/roundup/reporting/documentPackDeletion/DrillDownDrawer'
 import { cn } from '@/lib/utils'
+import ProtectedRoute from '@/components/auth/ProtectedRoute'
 
 export default function DocumentDeletionReport() {
   const [startDate, setStartDate] = useState(() => {
@@ -68,6 +69,7 @@ export default function DocumentDeletionReport() {
   }
 
   return (
+    <ProtectedRoute>
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex flex-col space-y-2">
         <h1 className="text-3xl font-bold">Document Deletion Report</h1>
@@ -174,5 +176,6 @@ export default function DocumentDeletionReport() {
         onClose={handleCloseDrawer}
       />
     </div>
+    </ProtectedRoute>
   )
 }

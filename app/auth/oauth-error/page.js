@@ -2,9 +2,10 @@
 
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 
-export default function OAuthErrorPage() {
+// Create a separate component for the search params logic
+function OAuthErrorContent() {
   const searchParams = useSearchParams()
   const error = searchParams.get('error')
   const description = searchParams.get('description')
@@ -177,5 +178,19 @@ export default function OAuthErrorPage() {
         )}
       </div>
     </div>
+  )
+}
+
+// Main component with Suspense wrapper
+export default function OAuthErrorPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+        <p className="text-gray-600">Loading...</p>
+      </div>
+    </div>}>
+      <OAuthErrorContent />
+    </Suspense>
   )
 }
