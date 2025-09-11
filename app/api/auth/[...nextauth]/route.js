@@ -31,13 +31,11 @@ const handler = NextAuth({
         try {
           const filemakerService = FileMakerService.getInstance();
 
-          console.log("FileMaker auth attempt:", credentials.username);
 
           // validate the JWT and return the user object.
 
           const nextAuthUser = await filemakerService.authenticateFileMakerUser(credentials.username, credentials.password)
           // const tempUser = {"id": 12234, "name": "fred", "filemakerDate": "some filemaker data" }
-          console.log("FileMaker authentication successful for:", credentials.username)
           // return tempUser
           return nextAuthUser
 
@@ -82,7 +80,6 @@ const handler = NextAuth({
         async authorize(credentials) {
 
           const userData = JSON.parse(credentials.user);
-          console.log('Parsed user data:', userData);
           return userData;
         
         }
@@ -105,7 +102,6 @@ const handler = NextAuth({
   // Callbacks for customizing the authentication flow
   callbacks: {
     async jwt({ token, user }) {
-      console.log(`in calllback token is ${JSON.stringify(token, null, 2)} user is ${JSON.stringify(user, null, 2)}`);
       // Add custom claims to JWT token
       if (user) {
         token.userId = user.id

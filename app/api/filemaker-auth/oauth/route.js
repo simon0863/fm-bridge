@@ -40,9 +40,7 @@ export async function GET(request) {
         switch (action) {
             case 'providers':
                 // Step 1: Get OAuth providers
-                console.log('Getting OAuth providers from:', host)
                 const providers = await filemakerOAuthService.getOAuthProviders(host)
-                console.log('OAuth providers:', providers)
                 
                 return NextResponse.json({
                     success: true,
@@ -52,9 +50,7 @@ export async function GET(request) {
 
             case 'initiate':
                 // Step 2: Initiate OAuth flow ultimatley leading to a callback from filemaker
-                console.log('Initiating OAuth flow with provider:', provider)
                 const oauthInit = await filemakerOAuthService.initiateOAuth(host, provider)
-                console.log('OAuth initiation result:', oauthInit)
                 
                 return NextResponse.json({
                     success: true,
@@ -73,9 +69,7 @@ export async function GET(request) {
                     }, { status: 400 })
                 }
 
-                console.log('Checking OAuth status for tracking ID:', trackingId)
                 const status = await filemakerOAuthService.checkOAuthStatus(trackingId)
-                console.log('OAuth status:', status)
                 
                 return NextResponse.json({
                     success: true,
@@ -96,9 +90,7 @@ export async function GET(request) {
                     }, { status: 400 })
                 }
 
-                console.log('Completing OAuth for tracking ID:', completeTrackingId)
                 const completed = await filemakerOAuthService.completeOAuth(completeTrackingId, JSON.parse(oauthResult))
-                console.log('OAuth completion result:', completed)
                 
                 return NextResponse.json({
                     success: true,
@@ -109,19 +101,15 @@ export async function GET(request) {
 
             case 'full-flow':
                 // Test the complete flow
-                console.log('Testing complete OAuth flow...')
                 
                 // 1. Get providers
                 const providersResult = await filemakerOAuthService.getOAuthProviders(host)
-                console.log('Providers:', providersResult)
                 
                 // 2. Initiate OAuth
                 const initiateResult = await filemakerOAuthService.initiateOAuth(host, provider)
-                console.log('Initiation:', initiateResult)
                 
                 // 3. Check status (should be pending)
                 const statusResult = await filemakerOAuthService.checkOAuthStatus(initiateResult.trackingId)
-                console.log('Status:', statusResult)
                 
                 return NextResponse.json({
                     success: true,
@@ -135,7 +123,6 @@ export async function GET(request) {
 
             case 'sessions':
                 // Get all current OAuth sessions
-                console.log('Getting OAuth sessions...')
                 const sessions = Array.from(filemakerOAuthService.oauthSessions.entries()).map(([trackingId, session]) => ({
                     trackingId,
                     ...session

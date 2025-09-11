@@ -49,10 +49,8 @@ export default function LoginForm() {
       // Pull the oauthUrl from the response data 
       const oauthUrl = responsedata.data.oauthUrl
 
-      console.log('in client try block url is', oauthUrl)
 
       if (oauthUrl) {
-        console.log('about to redirect to Microsoft OAuth')
         // Redirect to Microsoft OAuth using window.location for external URL
         window.location.href = oauthUrl
       } else {

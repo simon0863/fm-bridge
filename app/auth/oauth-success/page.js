@@ -16,7 +16,6 @@ function OAuthSuccessContent() {
       try {
         //const user = JSON.parse(decodeURIComponent(userData))
         const user = decodeURIComponent(userData)
-        console.log('in oath sucess pageuser data is ', user)
         
         // Use NextAuth's signIn to create the session
         signIn('filemaker-proxy', {

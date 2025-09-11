@@ -36,9 +36,7 @@ export async function GET(request) {
   const { searchParams } = new URL(request.url)
 
   // Log all parameters for debugging purposes
-  console.log('OAuth callback received:')
   for (const [key, value] of searchParams.entries()) {
-    console.log(`  ${key}: ${value}`)
   }
 
   // Extract the specific parameters we need for OAuth processing
@@ -55,7 +53,6 @@ export async function GET(request) {
   // This is the main flow: FileMaker → Microsoft → FileMaker → Our App
   // FileMaker redirects here with trackingID and identifier after processing Microsoft OAuth
   if (trackingID && identifier) {
-    console.log('FileMaker direct callback received')
 
     // Check for OAuth errors - FileMaker uses '0' to indicate success
     if (error && error !== '0') {
@@ -103,7 +100,6 @@ export async function GET(request) {
         filemakerSession.accessToken       // Use the OAuth session token
       )
 
-      console.log('NextAuthUser:', nextAuthUser)
 
       // ========================================================================
       // STEP 6: PREPARE FOR CLIENT-SIDE SESSION CREATION
@@ -132,7 +128,6 @@ export async function GET(request) {
   // This would handle direct Microsoft OAuth callbacks (bypassing FileMaker)
   // Currently not implemented as we use FileMaker as a proxy
   if (code && state) {
-    console.log('Microsoft OAuth callback received')
     // This would be the more complex flow that exchanges code for identifier
     // For now, redirect to error since we need to implement this
     return NextResponse.redirect(
