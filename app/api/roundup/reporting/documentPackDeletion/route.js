@@ -12,25 +12,35 @@ export async function GET(request) {
         // set up required date filtering
         const { searchParams } = new URL(request.url)
         const startDateParam = searchParams.get('startDate')
-        const days = parseInt(searchParams.get('days')) || 7
+        const endDateParam = searchParams.get('endDate')
+        const prevStartDateParam = searchParams.get('prevStartDate')
+        const prevEndDateParam = searchParams.get('prevEndDate')
         
-        // Validate days parameter
-        if (days < 1 || days > 30) {
-            return Response.json({ error: 'Days parameter must be between 1 and 30' }, { status: 400 })
-        }
-
         // Calculate date ranges
         const startDate = startDateParam ? new Date(startDateParam) : new Date()
         if (!startDateParam) {
             startDate.setDate(startDate.getDate() - 7) // Default to 7 days ago if no start date provided
         }
         
-        const endDate = new Date(startDate)
-        endDate.setDate(startDate.getDate() + days - 1)
+        const endDate = endDateParam ? new Date(endDateParam) : new Date()
+        if (!endDateParam) {
+            endDate.setDate(endDate.getDate() - 1) // Default to yesterday if no end date provided
+        }
 
-        //Previous period for trend comparison
-        const prevStartDate = new Date(startDate)
-        prevStartDate.setDate(prevStartDate.getDate() - days)
+        // Previous period dates (user selected)
+        const prevStartDate = prevStartDateParam ? new Date(prevStartDateParam) : new Date()
+        if (!prevStartDateParam) {
+            prevStartDate.setDate(prevStartDate.getDate() - 14) // Default to 2 weeks ago
+        }
+        
+        const prevEndDate = prevEndDateParam ? new Date(prevEndDateParam) : new Date()
+        if (!prevEndDateParam) {
+            prevEndDate.setDate(prevEndDate.getDate() - 8) // Default to 1 week ago
+        }
+
+        // Calculate days (inclusive)
+        const days = Math.floor((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24)) + 1
+        const prevDays = Math.floor((prevEndDate.getTime() - prevStartDate.getTime()) / (1000 * 3600 * 24)) + 1
 
         //Format for supabase
         const formatDate = (date) => date.toISOString().split('T')[0]
@@ -68,7 +78,7 @@ export async function GET(request) {
             .eq('title', 'Document Debug Log')
             .eq('log_data', 'Document Deletion From Pack')
             .gte('created_at', formatDate(prevStartDate))
-            .lt('created_at', formatDate(startDate))
+            .lte('created_at', formatDate(prevEndDate))
             .order('created_at', { ascending: false })
 
         if (prevError) {
@@ -162,8 +172,8 @@ export async function GET(request) {
                 },
                 previous: { 
                     start: formatDate(prevStartDate), 
-                    end: formatDate(startDate),
-                    days: days
+                    end: formatDate(prevEndDate),
+                    days: prevDays
                 }
             },
             summary: {

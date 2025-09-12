@@ -20,12 +20,36 @@ export default function DocumentDeletionReport() {
     date.setDate(date.getDate() - 7)
     return date
   })
-  const [days, setDays] = useState(7)
+  const [endDate, setEndDate] = useState(() => {
+    const date = new Date()
+    date.setDate(date.getDate() - 1) // Yesterday
+    return date
+  })
+  const [prevStartDate, setPrevStartDate] = useState(() => {
+    const date = new Date()
+    date.setDate(date.getDate() - 14) // 2 weeks ago
+    return date
+  })
+  const [prevEndDate, setPrevEndDate] = useState(() => {
+    const date = new Date()
+    date.setDate(date.getDate() - 8) // 1 week ago
+    return date
+  })
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [selectedDocument, setSelectedDocument] = useState(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
+
+  // Calculate days between start and end date (inclusive)
+  const calculateDays = (start, end) => {
+    if (!start || !end) return 0
+    const timeDiff = end.getTime() - start.getTime()
+    return Math.floor(timeDiff / (1000 * 3600 * 24)) + 1
+  }
+
+  const days = calculateDays(startDate, endDate)
+  const prevDays = calculateDays(prevStartDate, prevEndDate)
 
 
 
@@ -36,7 +60,9 @@ export default function DocumentDeletionReport() {
     try {
       const params = new URLSearchParams({
         startDate: startDate.toISOString().split('T')[0],
-        days: days.toString()
+        endDate: endDate.toISOString().split('T')[0],
+        prevStartDate: prevStartDate.toISOString().split('T')[0],
+        prevEndDate: prevEndDate.toISOString().split('T')[0]
       })
       
       const response = await fetch(`/api/roundup/reporting/documentPackDeletion?${params}`)
@@ -52,7 +78,7 @@ export default function DocumentDeletionReport() {
     } finally {
       setLoading(false)
     }
-  }, [startDate, days])
+  }, [startDate, endDate, prevStartDate, prevEndDate])
 
   useEffect(() => {
     fetchData()
@@ -66,6 +92,23 @@ export default function DocumentDeletionReport() {
   const handleCloseDrawer = () => {
     setDrawerOpen(false)
     setSelectedDocument(null)
+  }
+
+
+  const handleStartDateChange = (date) => {
+    if (date) setStartDate(date)
+  }
+
+  const handleEndDateChange = (date) => {
+    if (date) setEndDate(date)
+  }
+
+  const handlePrevStartDateChange = (date) => {
+    if (date) setPrevStartDate(date)
+  }
+
+  const handlePrevEndDateChange = (date) => {
+    if (date) setPrevEndDate(date)
   }
 
   return (
@@ -105,27 +148,48 @@ export default function DocumentDeletionReport() {
                   <Calendar
                     mode="single"
                     selected={startDate}
-                    onSelect={(date) => date && setStartDate(date)}
+                    onSelect={handleStartDateChange}
                     initialFocus
                   />
                 </PopoverContent>
               </Popover>
             </div>
 
-            {/* Days Dropdown */}
+            {/* End Date Picker */}
             <div className="flex flex-col space-y-2">
-              <label className="text-sm font-medium">Number of Days</label>
-              <Select value={days.toString()} onValueChange={(value) => setDays(parseInt(value))}>
-                <SelectTrigger className="w-[120px]">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="7">7 days</SelectItem>
-                  <SelectItem value="14">14 days</SelectItem>
-                  <SelectItem value="28">28 days</SelectItem>
-                </SelectContent>
-              </Select>
+              <label className="text-sm font-medium">End Date</label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "w-[240px] justify-start text-left font-normal",
+                      !endDate && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {endDate ? format(endDate, "PPP") : <span>Pick a date</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={endDate}
+                    onSelect={handleEndDateChange}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
+
+            {/* Days Display */}
+            <div className="flex flex-col space-y-2">
+              <label className="text-sm font-medium">Period</label>
+              <div className="flex items-center h-10 px-3 py-2 border border-input bg-background rounded-md text-sm">
+                {days} day{days !== 1 ? 's' : ''}
+              </div>
+            </div>
+
 
             {/* Refresh Button */}
             <div className="flex flex-col space-y-2">
@@ -140,11 +204,79 @@ export default function DocumentDeletionReport() {
               </Button>
             </div>
           </div>
+
+          {/* Previous Period Selection */}
+          <div className="mt-4 pt-4 border-t border-border">
+            <h4 className="text-sm font-medium mb-3">Previous Period (for comparison)</h4>
+            <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
+              {/* Previous Start Date Picker */}
+              <div className="flex flex-col space-y-2">
+                <label className="text-sm font-medium">Previous Start Date</label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-[240px] justify-start text-left font-normal",
+                        !prevStartDate && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {prevStartDate ? format(prevStartDate, "PPP") : <span>Pick a date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={prevStartDate}
+                      onSelect={handlePrevStartDateChange}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+
+              {/* Previous End Date Picker */}
+              <div className="flex flex-col space-y-2">
+                <label className="text-sm font-medium">Previous End Date</label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-[240px] justify-start text-left font-normal",
+                        !prevEndDate && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {prevEndDate ? format(prevEndDate, "PPP") : <span>Pick a date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={prevEndDate}
+                      onSelect={handlePrevEndDateChange}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+
+              {/* Previous Period Days Display */}
+              <div className="flex flex-col space-y-2">
+                <label className="text-sm font-medium">Period</label>
+                <div className="flex items-center h-10 px-3 py-2 border border-input bg-background rounded-md text-sm">
+                  {prevDays} day{prevDays !== 1 ? 's' : ''}
+                </div>
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
 
       {/* Report Header with Summary */}
-      {data && <ReportHeader data={data} />}
+      {data && <ReportHeader data={data} selectedDates={{ startDate, endDate, prevStartDate, prevEndDate }} />}
 
       {/* Main Data Table */}
       {data && (
