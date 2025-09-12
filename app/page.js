@@ -69,6 +69,7 @@ function getCategory(path) {
   if (path.startsWith('auth/')) return 'auth';
   if (path.startsWith('core/')) return 'core';
   if (path.startsWith('roundup/')) return 'roundup';
+  if (path === 'oauth/redirect') return 'core'; // OAuth redirect is a core auth feature
   return 'other';
 }
 
