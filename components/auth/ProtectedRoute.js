@@ -6,7 +6,7 @@
 "use client"
 
 import { useSession } from 'next-auth/react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { useEffect, useState, Suspense } from 'react'
 import { signIn } from 'next-auth/react'
 
@@ -15,6 +15,7 @@ function ProtectedRouteContent({ children }) {
   const { data: session, status } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()
+  const pathname = usePathname()
   const [isProcessingJWT, setIsProcessingJWT] = useState(false)
 
   useEffect(() => {
@@ -32,13 +33,13 @@ function ProtectedRouteContent({ children }) {
           // Did the magic link fail to authenticate?
           if (result?.error) {
             // Handle magic link error - clean URL and redirect to error page
-            router.replace(router.asPath.split('?')[0]) // Remove query params
+            router.replace(pathname) // Remove query params
             router.push('/auth/magikLinkError')
             return // Exit early, don't continue
           }
           
           // Success - clean URL by removing JWT parameters
-          router.replace(router.asPath.split('?')[0]) // Remove query params
+          router.replace(pathname) // Remove query params
           
         } catch (error) {
           console.error('Magic link processing error:', error)
