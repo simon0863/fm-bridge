@@ -124,151 +124,164 @@ export default function DocumentDeletionReport() {
       {/* Date Selection Controls */}
       <Card>
         <CardHeader>
-          <CardTitle>Report Period</CardTitle>
+          <CardTitle>Report Periods</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
-            {/* Start Date Picker */}
-            <div className="flex flex-col space-y-2">
-              <label className="text-sm font-medium">Start Date</label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-[240px] justify-start text-left font-normal",
-                      !startDate && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {startDate ? format(startDate, "PPP") : <span>Pick a date</span>}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={startDate}
-                    onSelect={handleStartDateChange}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
+          {/* Report Period and Previous Period Side by Side */}
+          <div className="space-y-4">
+            {/* Section Headers */}
+            <div className="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between">
+              <h4 className="text-sm font-medium">Report Period</h4>
+              <h4 className="text-sm font-medium">Previous Period (for comparison)</h4>
+              <div className="flex-shrink-0 w-[120px]"></div> {/* Spacer for refresh button */}
             </div>
 
-            {/* End Date Picker */}
-            <div className="flex flex-col space-y-2">
-              <label className="text-sm font-medium">End Date</label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-[240px] justify-start text-left font-normal",
-                      !endDate && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {endDate ? format(endDate, "PPP") : <span>Pick a date</span>}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={endDate}
-                    onSelect={handleEndDateChange}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
+            {/* Input Fields Row */}
+            <div className="flex flex-col lg:flex-row gap-6 items-start lg:items-end justify-between">
+              {/* Report Period Fields */}
+              <div className="flex-1">
+                <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
+                  {/* Start Date Picker */}
+                  <div className="flex flex-col space-y-2">
+                    <label className="text-sm font-medium">Start Date</label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "w-[240px] justify-start text-left font-normal",
+                            !startDate && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {startDate ? format(startDate, "PPP") : <span>Pick a date</span>}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={startDate}
+                          onSelect={handleStartDateChange}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
 
-            {/* Days Display */}
-            <div className="flex flex-col space-y-2">
-              <label className="text-sm font-medium">Period</label>
-              <div className="flex items-center h-10 px-3 py-2 border border-input bg-background rounded-md text-sm">
-                {days} day{days !== 1 ? 's' : ''}
-              </div>
-            </div>
+                  {/* End Date Picker */}
+                  <div className="flex flex-col space-y-2">
+                    <label className="text-sm font-medium">End Date</label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "w-[240px] justify-start text-left font-normal",
+                            !endDate && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {endDate ? format(endDate, "PPP") : <span>Pick a date</span>}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={endDate}
+                          onSelect={handleEndDateChange}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
 
-
-            {/* Refresh Button */}
-            <div className="flex flex-col space-y-2">
-              <label className="text-sm font-medium">&nbsp;</label>
-              <Button onClick={fetchData} disabled={loading} className="w-[120px]">
-                {loading ? (
-                  <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
-                  <RefreshCw className="mr-2 h-4 w-4" />
-                )}
-                Refresh
-              </Button>
-            </div>
-          </div>
-
-          {/* Previous Period Selection */}
-          <div className="mt-4 pt-4 border-t border-border">
-            <h4 className="text-sm font-medium mb-3">Previous Period (for comparison)</h4>
-            <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
-              {/* Previous Start Date Picker */}
-              <div className="flex flex-col space-y-2">
-                <label className="text-sm font-medium">Previous Start Date</label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className={cn(
-                        "w-[240px] justify-start text-left font-normal",
-                        !prevStartDate && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {prevStartDate ? format(prevStartDate, "PPP") : <span>Pick a date</span>}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={prevStartDate}
-                      onSelect={handlePrevStartDateChange}
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
-
-              {/* Previous End Date Picker */}
-              <div className="flex flex-col space-y-2">
-                <label className="text-sm font-medium">Previous End Date</label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className={cn(
-                        "w-[240px] justify-start text-left font-normal",
-                        !prevEndDate && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {prevEndDate ? format(prevEndDate, "PPP") : <span>Pick a date</span>}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={prevEndDate}
-                      onSelect={handlePrevEndDateChange}
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
-
-              {/* Previous Period Days Display */}
-              <div className="flex flex-col space-y-2">
-                <label className="text-sm font-medium">Period</label>
-                <div className="flex items-center h-10 px-3 py-2 border border-input bg-background rounded-md text-sm">
-                  {prevDays} day{prevDays !== 1 ? 's' : ''}
+                  {/* Days Display */}
+                  <div className="flex flex-col space-y-2">
+                    <label className="text-sm font-medium">Period</label>
+                    <div className="flex items-center h-10 px-3 py-2 border border-input bg-background rounded-md text-sm">
+                      {days} day{days !== 1 ? 's' : ''}
+                    </div>
+                  </div>
                 </div>
+              </div>
+
+              {/* Previous Period Fields */}
+              <div className="flex-1">
+                <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
+                  {/* Previous Start Date Picker */}
+                  <div className="flex flex-col space-y-2">
+                    <label className="text-sm font-medium">Previous Start Date</label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "w-[240px] justify-start text-left font-normal",
+                            !prevStartDate && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {prevStartDate ? format(prevStartDate, "PPP") : <span>Pick a date</span>}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={prevStartDate}
+                          onSelect={handlePrevStartDateChange}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+
+                  {/* Previous End Date Picker */}
+                  <div className="flex flex-col space-y-2">
+                    <label className="text-sm font-medium">Previous End Date</label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "w-[240px] justify-start text-left font-normal",
+                            !prevEndDate && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {prevEndDate ? format(prevEndDate, "PPP") : <span>Pick a date</span>}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={prevEndDate}
+                          onSelect={handlePrevEndDateChange}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+
+                  {/* Previous Period Days Display */}
+                  <div className="flex flex-col space-y-2">
+                    <label className="text-sm font-medium">Period</label>
+                    <div className="flex items-center h-10 px-3 py-2 border border-input bg-background rounded-md text-sm">
+                      {prevDays} day{prevDays !== 1 ? 's' : ''}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Refresh Button */}
+              <div className="flex-shrink-0">
+                <Button onClick={fetchData} disabled={loading} className="w-[120px] h-10">
+                  {loading ? (
+                    <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <RefreshCw className="mr-2 h-4 w-4" />
+                  )}
+                  Refresh
+                </Button>
               </div>
             </div>
           </div>
@@ -276,7 +289,7 @@ export default function DocumentDeletionReport() {
       </Card>
 
       {/* Report Header with Summary */}
-      {data && <ReportHeader data={data} selectedDates={{ startDate, endDate, prevStartDate, prevEndDate }} />}
+      {data && <ReportHeader data={data} selectedDates={{ startDate, endDate, prevStartDate, prevEndDate }} onRefresh={fetchData} loading={loading} />}
 
       {/* Main Data Table */}
       {data && (

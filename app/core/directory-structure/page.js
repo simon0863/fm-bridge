@@ -253,16 +253,6 @@ export default function DirectoryStructurePage() {
           </p>
         </div>
 
-        {/* Directory Structure */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-            📁 Project Structure
-          </h2>
-          <div className="bg-gray-50 rounded-lg p-4 overflow-x-auto">
-            <DirectoryTree structure={directoryStructure} />
-          </div>
-        </div>
-
         {/* Placement Guide */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
           <h2 className="text-2xl font-semibold text-gray-900 mb-4">
@@ -279,6 +269,16 @@ export default function DirectoryStructurePage() {
                 </p>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Directory Structure */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+            📁 Project Structure
+          </h2>
+          <div className="bg-gray-50 rounded-lg p-4 overflow-x-auto">
+            <DirectoryTree structure={directoryStructure} />
           </div>
         </div>
 

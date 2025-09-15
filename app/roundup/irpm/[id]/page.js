@@ -9,14 +9,15 @@ import { testIRPMData } from '@/lib/irpm-test-data'  // Updated import path
 
 export default function IRPMPage() {
   const params = useParams()
-  const testMode = false;
+  const { id } = params
+  const testMode = !id || id === 'undefined' || id === '[id]' || id === '%5Bid%5D' || id.trim() === '';
+  console.log('Test mode:', testMode)
+  console.log('ID:', id)
+  
   const [data, setData] = useState({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [rowValues, setRowValues] = useState({})
-
-  // Get policy id from URL params
-  const { id } = params
 
   // Load data from test data or API
   useEffect(() => {
@@ -80,6 +81,12 @@ export default function IRPMPage() {
 
   // Update IRPM data function
   const updateIRPMData = async (updateType) => {
+    // Check if in test mode
+    if (testMode) {
+      alert(`Unable to update policy IRPM values in test mode.\n\nTest mode is active because no valid policy ID of a renewal quote was provided. To update real data, please navigate to the IRPM calculator with a valid policy ID of a renewal quote.`);
+      return;
+    }
+
     try {
       setLoading(true);
       setError(null);
@@ -136,12 +143,29 @@ export default function IRPMPage() {
       <div className="container mx-auto p-6 space-y-6">
         <div className="flex flex-col space-y-2">
           <h1 className="text-3xl font-bold">IRPM Calculator</h1>
-          {testMode && (
-            <p className="text-muted-foreground">
-              Policy ID: {id}
-            </p>
-          )}
         </div>
+
+        {/* Test Mode Indicator */}
+        {testMode && (
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-medium text-yellow-800">
+                  Test Mode Active
+                </h3>
+                <div className="mt-2 text-sm text-yellow-700">
+                  <p>No policy ID has been provided. Test data is being used for demonstration purposes.</p>
+                  <p className="mt-1">You can see the component functioning and data being updated in the debug info below.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Error Display */}
         {error && (
