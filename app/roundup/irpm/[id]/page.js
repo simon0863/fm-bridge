@@ -19,54 +19,51 @@ export default function IRPMPage() {
   const { id } = params
 
   // Load data from test data or API
-if (testMode) {
   useEffect(() => {
-    // Simulate loading data
-    console.log('IRPM Page loaded for policy:', id)
-    
-    // Load test data after a short delay
-    setTimeout(() => {
-      setData(testIRPMData)
-      setLoading(false)
-    }, 1000)
-  }, [id])
-
-} else {
-  useEffect(() => {
-    // Load data from API
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        setError(null); // Clear previous errors
-        console.log('🔍 Fetching IRPM data for record:', id);
-        
-        const response = await fetch(`/api/roundup/irpm/${id}`);
-        const result = await response.json();
-        
-        if (result.success) {
-          console.log('✅ IRPM data loaded:', result.data);
-          setData(result.data);
-        } else {
-          console.error('❌ API Error:', result.error);
-          setError(result.error);
-          // Fallback to test data on error
+    if (testMode) {
+      // Simulate loading data
+      console.log('IRPM Page loaded for policy:', id)
+      
+      // Load test data after a short delay
+      setTimeout(() => {
+        setData(testIRPMData)
+        setLoading(false)
+      }, 1000)
+    } else {
+      // Load data from API
+      const fetchData = async () => {
+        try {
+          setLoading(true);
+          setError(null); // Clear previous errors
+          console.log('🔍 Fetching IRPM data for record:', id);
+          
+          const response = await fetch(`/api/roundup/irpm/${id}`);
+          const result = await response.json();
+          
+          if (result.success) {
+            console.log('✅ IRPM data loaded:', result.data);
+            setData(result.data);
+          } else {
+            console.error('❌ API Error:', result.error);
+            setError(result.error);
+            // Fallback to test data on error
+            setData(testIRPMData);
+          }
+        } catch (error) {
+          console.error('❌ Network error:', error);
+          setError(error.message);
+          // Fallback to test data on network error
           setData(testIRPMData);
+        } finally {
+          setLoading(false);
         }
-      } catch (error) {
-        console.error('❌ Network error:', error);
-        setError(error.message);
-        // Fallback to test data on network error
-        setData(testIRPMData);
-      } finally {
-        setLoading(false);
+      };
+      
+      if (id) {
+        fetchData();
       }
-    };
-    
-    if (id) {
-      fetchData();
     }
-  }, [id]);
-}
+  }, [id, testMode]);
   // Handle row value changes from IRPMForm
   const handleRowStateChange = (newRowValues) => {
     setRowValues(newRowValues)

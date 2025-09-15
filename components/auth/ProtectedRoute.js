@@ -57,7 +57,7 @@ function ProtectedRouteContent({ children }) {
     }
   
     processSession()
-  }, [searchParams, session, status, isProcessingJWT, router])
+  }, [searchParams, session, status, isProcessingJWT, router, pathname])
 
   // Show loading while checking authentication or processing JWT
   if (status === 'loading' || isProcessingJWT) {
