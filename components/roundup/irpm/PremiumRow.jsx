@@ -104,7 +104,7 @@ export default function PremiumRow({ premium, rowState, onPremiumUpdate, index }
         fontWeight: "bold", 
         textAlign: "left", 
         color: "#89898B", 
-        fontSize: "12px", 
+        fontSize: "16px", 
         fontFamily: "Helvetica" 
       }}>
         {premium.name}
@@ -116,7 +116,7 @@ export default function PremiumRow({ premium, rowState, onPremiumUpdate, index }
         borderBottom: "1px solid #ddd", 
         padding: "8px", 
         textAlign: "left", 
-        fontSize: "12px", 
+        fontSize: "16px", 
         fontFamily: "Arial", 
         color: "#515262" 
       }}>
@@ -129,12 +129,12 @@ export default function PremiumRow({ premium, rowState, onPremiumUpdate, index }
         borderBottom: "1px solid #ddd", 
         padding: "8px", 
         textAlign: "left", 
-        fontSize: "12px", 
+        fontSize: "16px", 
         fontFamily: "Arial", 
         color: "#515262" 
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '12px', fontFamily: "Arial", color: "#515262" }}>
+          <span style={{ fontSize: '16px', fontFamily: "Arial", color: "#515262" }}>
             {rowState?.IRPMadjustment ?? premium.IRPMadjustment}%
           </span>
         </div>
@@ -146,7 +146,7 @@ export default function PremiumRow({ premium, rowState, onPremiumUpdate, index }
         borderBottom: "1px solid #ddd", 
         padding: "8px", 
         textAlign: "left", 
-        fontSize: "12px", 
+        fontSize: "16px", 
         fontFamily: "Arial", 
         color: "#515262" 
       }}>
@@ -159,7 +159,7 @@ export default function PremiumRow({ premium, rowState, onPremiumUpdate, index }
         borderBottom: "1px solid #ddd", 
         padding: "8px", 
         textAlign: "left", 
-        fontSize: "12px", 
+        fontSize: "16px", 
         fontFamily: "Arial", 
         color: "#515262" 
       }}>
@@ -172,7 +172,7 @@ export default function PremiumRow({ premium, rowState, onPremiumUpdate, index }
         borderBottom: "1px solid #ddd", 
         padding: "8px", 
         textAlign: "left", 
-        fontSize: "12px", 
+        fontSize: "16px", 
         fontFamily: "Arial", 
         color: "#515262" 
       }}>
@@ -185,7 +185,7 @@ export default function PremiumRow({ premium, rowState, onPremiumUpdate, index }
         borderBottom: "1px solid #ddd", 
         padding: "8px", 
         textAlign: "left", 
-        fontSize: "12px", 
+        fontSize: "16px", 
         fontFamily: "Arial", 
         color: "#515262" 
       }}>

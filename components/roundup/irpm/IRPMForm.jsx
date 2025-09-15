@@ -116,14 +116,14 @@ export default function IRPMForm({ data, onRowStateChange }) {
         <thead>
           {/* Header row */}
           <tr>
-            <th style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", backgroundColor: "#F9F9F9", color: "#89898B", textAlign: "left", fontSize: "12px", fontFamily: "Helvetica", fontWeight: "bold" }}></th>
-            <th style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", backgroundColor: "#F9F9F9", color: "#89898B", textAlign: "left", fontSize: "12px", fontFamily: "Helvetica", fontWeight: "bold" }}>Original Premium</th>
-            <th style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", backgroundColor: "#F9F9F9", color: "#89898B", textAlign: "left", fontSize: "12px", fontFamily: "Helvetica", fontWeight: "bold" }}>% Premium Change</th>
-            <th style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", backgroundColor: "#F9F9F9", color: "#89898B", textAlign: "left", fontSize: "12px", fontFamily: "Helvetica", fontWeight: "bold" }}>$ Premium Target</th>
-            <th style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", backgroundColor: "#F9F9F9", color: "#89898B", textAlign: "left", fontSize: "12px", fontFamily: "Helvetica", fontWeight: "bold" }}>Current Renewal Premium</th>
-            <th style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", backgroundColor: "#F9F9F9", color: "#89898B", textAlign: "left", fontSize: "12px", fontFamily: "Helvetica", fontWeight: "bold" }}>New IRPM</th>
+            <th style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", backgroundColor: "#F9F9F9", color: "#89898B", textAlign: "left", fontSize: "16px", fontFamily: "Helvetica", fontWeight: "bold" }}></th>
+            <th style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", backgroundColor: "#F9F9F9", color: "#89898B", textAlign: "left", fontSize: "16px", fontFamily: "Helvetica", fontWeight: "bold" }}>Original Premium</th>
+            <th style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", backgroundColor: "#F9F9F9", color: "#89898B", textAlign: "left", fontSize: "16px", fontFamily: "Helvetica", fontWeight: "bold" }}>% Premium Change</th>
+            <th style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", backgroundColor: "#F9F9F9", color: "#89898B", textAlign: "left", fontSize: "16px", fontFamily: "Helvetica", fontWeight: "bold" }}>$ Premium Target</th>
+            <th style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", backgroundColor: "#F9F9F9", color: "#89898B", textAlign: "left", fontSize: "16px", fontFamily: "Helvetica", fontWeight: "bold" }}>Current Renewal Premium</th>
+            <th style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", backgroundColor: "#F9F9F9", color: "#89898B", textAlign: "left", fontSize: "16px", fontFamily: "Helvetica", fontWeight: "bold" }}>New IRPM</th>
             {showAdjustColumn && (
-              <th style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", backgroundColor: "#F9F9F9", color: "#89898B", textAlign: "left", fontSize: "12px", fontFamily: "Helvetica", fontWeight: "bold" }}>Adjust</th>
+              <th style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", backgroundColor: "#F9F9F9", color: "#89898B", textAlign: "left", fontSize: "16px", fontFamily: "Helvetica", fontWeight: "bold" }}>Adjust</th>
             )}
           </tr>
         </thead>
@@ -144,15 +144,15 @@ export default function IRPMForm({ data, onRowStateChange }) {
           {/* Total row */}
           <tr>
             {/* Cell 1: Total */}
-            <td style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", fontWeight: "bold", textAlign: "left", color: "#89898B", fontSize: "12px", fontFamily: "Helvetica" }}>Total</td>
+            <td style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", fontWeight: "bold", textAlign: "left", color: "#89898B", fontSize: "16px", fontFamily: "Helvetica" }}>Total</td>
             {/* Cell 2: Previous Total */}
-            <td style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", textAlign: "left", fontSize: "12px", fontFamily: "Arial", color: "#515262" }}>
+            <td style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", textAlign: "left", fontSize: "16px", fontFamily: "Arial", color: "#515262" }}>
               {data?.totals?.previousTotal ? `$${Math.round(data.totals.previousTotal).toLocaleString()}` : ""}
             </td>
             {/* Cell 3: % Premium Change Percentage*/}
-            <td style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", textAlign: "left", fontSize: "12px", fontFamily: "Arial", color: "#515262" }}>
+            <td style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", textAlign: "left", fontSize: "16px", fontFamily: "Arial", color: "#515262" }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '12px', fontFamily: "Arial", color: "#515262" }}>
+                <span style={{ fontSize: '16px', fontFamily: "Arial", color: "#515262" }}>
                   {totals.targetTotal > 0 && data?.totals?.previousTotal > 0 
                     ? (((totals.targetTotal - data?.totals?.previousTotal) / data?.totals?.previousTotal) * 100).toFixed(1)
                     : "0"}%
@@ -160,18 +160,18 @@ export default function IRPMForm({ data, onRowStateChange }) {
               </div>
             </td>
             {/* Cell 4: Premium target total */}
-            <td style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", textAlign: "left", fontSize: "12px", fontFamily: "Arial", color: "#515262" }}>
+            <td style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", textAlign: "left", fontSize: "16px", fontFamily: "Arial", color: "#515262" }}>
               {totals.targetTotal > 0 ? `$${Math.round(totals.targetTotal).toLocaleString()}` : ""}
             </td>
             {/* Cell 5: Current renewal total*/}
-            <td style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", textAlign: "left", fontSize: "12px", fontFamily: "Arial", color: "#515262" }}>
+            <td style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", textAlign: "left", fontSize: "16px", fontFamily: "Arial", color: "#515262" }}>
               {totals.currentTotal > 0 ? `$${Math.round(totals.currentTotal).toLocaleString()}` : ""}
             </td>
             {/* Cell 6: Blank*/}
-            <td style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", textAlign: "left", fontSize: "12px", fontFamily: "Arial", color: "#515262" }}></td>
+            <td style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", textAlign: "left", fontSize: "16px", fontFamily: "Arial", color: "#515262" }}></td>
             {/* Cell 7: blank*/}
             {showAdjustColumn && (
-              <td style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", textAlign: "left", fontSize: "12px", fontFamily: "Arial", color: "#515262" }}></td>
+              <td style={{ borderTop: "1px solid #ddd", borderBottom: "1px solid #ddd", padding: "8px", textAlign: "left", fontSize: "16px", fontFamily: "Arial", color: "#515262" }}></td>
             )}
           </tr>
         </tbody>

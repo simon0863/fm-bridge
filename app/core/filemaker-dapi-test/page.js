@@ -8,6 +8,9 @@ export default function FileMakerDAPITestPage() {
   const [tokenResponse, setTokenResponse] = useState('')
   const [validateResponse, setValidateResponse] = useState('')
   const [revokeResponse, setRevokeResponse] = useState('')
+  const [sharedSessionResponse, setSharedSessionResponse] = useState('')
+  const [sessionRecoveryResponse, setSessionRecoveryResponse] = useState('')
+  const [irpmApiResponse, setIrpmApiResponse] = useState('')
   const [loading, setLoading] = useState({})
   const [currentToken, setCurrentToken] = useState('')
 
@@ -77,6 +80,9 @@ export default function FileMakerDAPITestPage() {
     setTokenResponse('')
     setValidateResponse('')
     setRevokeResponse('')
+    setSharedSessionResponse('')
+    setSessionRecoveryResponse('')
+    setIrpmApiResponse('')
     setCurrentToken('')
   }
 
@@ -201,6 +207,75 @@ export default function FileMakerDAPITestPage() {
             />
           </div>
 
+          {/* Test Shared Session */}
+          <div className="bg-white p-6 rounded-lg shadow">
+            <h2 className="text-xl font-semibold mb-4 text-purple-600">
+              Step 5: Test Shared Session Management
+            </h2>
+            <p className="text-gray-600 mb-4">
+              Test the new shared session management - should reuse the same session token
+            </p>
+            <button
+              onClick={() => handleTest('test-shared-session', setSharedSessionResponse)}
+              disabled={loading['test-shared-session']}
+              className="w-full px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 disabled:bg-purple-300 mb-4"
+            >
+              {loading['test-shared-session'] ? 'Testing...' : 'Test Shared Session'}
+            </button>
+            <textarea
+              value={sharedSessionResponse}
+              onChange={(e) => setSharedSessionResponse(e.target.value)}
+              placeholder="Shared session test result will appear here..."
+              className="w-full h-32 p-3 border border-gray-300 rounded font-mono text-sm"
+            />
+          </div>
+
+          {/* Test Session Recovery */}
+          <div className="bg-white p-6 rounded-lg shadow">
+            <h2 className="text-xl font-semibold mb-4 text-indigo-600">
+              Step 6: Test Session Recovery
+            </h2>
+            <p className="text-gray-600 mb-4">
+              Test session recovery by forcing a health check - this will validate if the session is still alive in FileMaker
+            </p>
+            <button
+              onClick={() => handleTest('test-session-recovery', setSessionRecoveryResponse)}
+              disabled={loading['test-session-recovery']}
+              className="w-full px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 disabled:bg-indigo-300 mb-4"
+            >
+              {loading['test-session-recovery'] ? 'Testing...' : 'Test Session Recovery'}
+            </button>
+            <textarea
+              value={sessionRecoveryResponse}
+              onChange={(e) => setSessionRecoveryResponse(e.target.value)}
+              placeholder="Session recovery test result will appear here..."
+              className="w-full h-32 p-3 border border-gray-300 rounded font-mono text-sm"
+            />
+          </div>
+
+          {/* Test IRPM API */}
+          <div className="bg-white p-6 rounded-lg shadow">
+            <h2 className="text-xl font-semibold mb-4 text-teal-600">
+              Step 7: Test IRPM API
+            </h2>
+            <p className="text-gray-600 mb-4">
+              Test the IRPM API endpoint - this will test the complete flow from shared session to FileMaker data retrieval
+            </p>
+            <button
+              onClick={() => handleTest('test-irpm-api', setIrpmApiResponse)}
+              disabled={loading['test-irpm-api']}
+              className="w-full px-4 py-2 bg-teal-500 text-white rounded hover:bg-teal-600 disabled:bg-teal-300 mb-4"
+            >
+              {loading['test-irpm-api'] ? 'Testing...' : 'Test IRPM API'}
+            </button>
+            <textarea
+              value={irpmApiResponse}
+              onChange={(e) => setIrpmApiResponse(e.target.value)}
+              placeholder="IRPM API test result will appear here..."
+              className="w-full h-32 p-3 border border-gray-300 rounded font-mono text-sm"
+            />
+          </div>
+
         </div>
 
         {/* Instructions */}
@@ -211,6 +286,9 @@ export default function FileMakerDAPITestPage() {
             <li><strong>Get Token:</strong> Create a data session token for FileMaker operations</li>
             <li><strong>Validate Session:</strong> Check if the current session is still valid</li>
             <li><strong>Revoke Session:</strong> Clean up by revoking the session token</li>
+            <li><strong>Test Shared Session:</strong> Test the new shared session management system</li>
+            <li><strong>Test Session Recovery:</strong> Test session recovery by forcing a health check</li>
+            <li><strong>Test IRPM API:</strong> Test the complete IRPM API flow with FileMaker data</li>
           </ol>
           <div className="mt-4 p-4 bg-yellow-100 rounded">
             <p className="text-yellow-800 text-sm">
