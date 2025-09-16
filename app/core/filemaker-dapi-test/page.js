@@ -10,7 +10,6 @@ export default function FileMakerDAPITestPage() {
   const [revokeResponse, setRevokeResponse] = useState('')
   const [sharedSessionResponse, setSharedSessionResponse] = useState('')
   const [sessionRecoveryResponse, setSessionRecoveryResponse] = useState('')
-  const [irpmApiResponse, setIrpmApiResponse] = useState('')
   const [loading, setLoading] = useState({})
   const [currentToken, setCurrentToken] = useState('')
 
@@ -82,7 +81,6 @@ export default function FileMakerDAPITestPage() {
     setRevokeResponse('')
     setSharedSessionResponse('')
     setSessionRecoveryResponse('')
-    setIrpmApiResponse('')
     setCurrentToken('')
   }
 
@@ -253,28 +251,6 @@ export default function FileMakerDAPITestPage() {
             />
           </div>
 
-          {/* Test IRPM API */}
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-xl font-semibold mb-4 text-teal-600">
-              Step 7: Test IRPM API
-            </h2>
-            <p className="text-gray-600 mb-4">
-              Test the IRPM API endpoint - this will test the complete flow from shared session to FileMaker data retrieval
-            </p>
-            <button
-              onClick={() => handleTest('test-irpm-api', setIrpmApiResponse)}
-              disabled={loading['test-irpm-api']}
-              className="w-full px-4 py-2 bg-teal-500 text-white rounded hover:bg-teal-600 disabled:bg-teal-300 mb-4"
-            >
-              {loading['test-irpm-api'] ? 'Testing...' : 'Test IRPM API'}
-            </button>
-            <textarea
-              value={irpmApiResponse}
-              onChange={(e) => setIrpmApiResponse(e.target.value)}
-              placeholder="IRPM API test result will appear here..."
-              className="w-full h-32 p-3 border border-gray-300 rounded font-mono text-sm"
-            />
-          </div>
 
         </div>
 
@@ -288,7 +264,6 @@ export default function FileMakerDAPITestPage() {
             <li><strong>Revoke Session:</strong> Clean up by revoking the session token</li>
             <li><strong>Test Shared Session:</strong> Test the new shared session management system</li>
             <li><strong>Test Session Recovery:</strong> Test session recovery by forcing a health check</li>
-            <li><strong>Test IRPM API:</strong> Test the complete IRPM API flow with FileMaker data</li>
           </ol>
           <div className="mt-4 p-4 bg-yellow-100 rounded">
             <p className="text-yellow-800 text-sm">
