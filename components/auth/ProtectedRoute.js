@@ -1,14 +1,51 @@
-// this is a protected route for users
-// it useed to protect pages that require users to be logged in
-// this functions for all authentication providers 
-// Those protected pages have components that are wrapped in this component
-// See for example app/auth/exampleProtectedPage/page.js
+// components/auth/ProtectedRoute.js
 "use client"
 
 import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { useEffect, useState, Suspense } from 'react'
 import { signIn } from 'next-auth/react'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Shield, Home, LogIn } from 'lucide-react'
+
+// NotLoggedIn component for showing a user-friendly message
+function NotLoggedInPage() {
+  return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <Card className="max-w-md w-full">
+        <CardHeader className="text-center">
+          <div className="flex justify-center mb-4">
+            <Shield className="h-16 w-16 text-red-500" />
+          </div>
+          <CardTitle className="text-2xl text-gray-900">
+            Authentication Required
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="text-center space-y-4">
+          <p className="text-gray-600">
+            You need to be logged in to access this page. Please sign in to continue.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button asChild className="flex-1">
+              <Link href="/auth/login">
+                <LogIn className="mr-2 h-4 w-4" />
+                Sign In
+              </Link>
+            </Button>
+            <Button variant="outline" asChild className="flex-1">
+              <Link href="/">
+                <Home className="mr-2 h-4 w-4" />
+                Go Home
+              </Link>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
 
 // Content component with useSearchParams()
 function ProtectedRouteContent({ children }) {
@@ -17,6 +54,9 @@ function ProtectedRouteContent({ children }) {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const [isProcessingJWT, setIsProcessingJWT] = useState(false)
+
+  // Get the unauthorized redirect behavior from environment variable
+  const unauthorizedRedirect = process.env.NEXT_PUBLIC_SITE_SETTINGS_UNAUTHORIZED_REDIRECT || 'redirect'
 
   useEffect(() => {
     const processSession = async () => {
@@ -52,12 +92,15 @@ function ProtectedRouteContent({ children }) {
       
       // Only check for regular auth if no magic link processing
       if (!jwt && status !== 'loading' && !isProcessingJWT && !session) {
-        router.push('/auth/login')
+        if (unauthorizedRedirect === 'redirect') {
+          router.push('/auth/login')
+        }
+        // If unauthorizedRedirect is 'show-message', we don't redirect - just let the component render the message
       }
     }
   
     processSession()
-  }, [searchParams, session, status, isProcessingJWT, router, pathname])
+  }, [searchParams, session, status, isProcessingJWT, router, pathname, unauthorizedRedirect])
 
   // Show loading while checking authentication or processing JWT
   if (status === 'loading' || isProcessingJWT) {
@@ -73,8 +116,12 @@ function ProtectedRouteContent({ children }) {
     )
   }
 
-  // Don't render if not authenticated
+  // Handle unauthenticated users based on environment variable
   if (!session) {
+    if (unauthorizedRedirect === 'show-message') {
+      return <NotLoggedInPage />
+    }
+    // For 'redirect' behavior, return null (will redirect in useEffect)
     return null
   }
 
